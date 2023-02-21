@@ -1,5 +1,11 @@
 ---
 spring:
   profiles: dev
+  jpa:
+    show-sql: true
+  h2:
+    console:
+      enable: true
+
 
 ## Include your configuration to Development Environment
