@@ -1,11 +1,4 @@
----
-spring:
-  profiles: dev
-  jpa:
-    show-sql: true
-  h2:
-    console:
-      enable: true
-
+server:
+  port: 8282
 
 ## Include your configuration to Development Environment

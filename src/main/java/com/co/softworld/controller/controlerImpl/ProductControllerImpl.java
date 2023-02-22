@@ -16,7 +16,7 @@ import java.util.List;
 public class ProductControllerImpl implements IProductController {
 
     @Autowired
-    IProductService productService;
+    private IProductService productService;
 
     @Override
     @GetMapping("/findAll")
