@@ -9,6 +9,8 @@ import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 import java.util.ArrayList;
 import java.util.List;
 
+import static org.hamcrest.MatcherAssert.assertThat;
+import static org.hamcrest.Matchers.equalTo;
 import static org.junit.jupiter.api.Assertions.*;
 
 @DataJpaTest
@@ -28,5 +30,6 @@ class ProductDaoTest {
         products.add(new Product(1, "computer", 400));
         products.add(new Product(2, "mouse", 10));
         assertEquals(products, productDao.findAll());
+        assertThat(productDao.findAll(), equalTo(products));
     }
 }
