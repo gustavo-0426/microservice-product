@@ -2,17 +2,19 @@ package com.co.softworld.service.serviceImpl;
 
 import com.co.softworld.dao.IProductDao;
 import com.co.softworld.entity.Product;
+
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.MethodSource;
 import org.mockito.*;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Optional;
+import java.util.*;
 
 import static java.util.Arrays.asList;
-import static org.junit.jupiter.api.Assertions.*;
+import static org.hamcrest.MatcherAssert.assertThat;
+import static org.hamcrest.Matchers.*;
 import static org.mockito.Mockito.when;
 import static org.mockito.MockitoAnnotations.openMocks;
 
@@ -24,7 +26,6 @@ class ProductServiceImplTest {
     @Mock
     private IProductDao productDao;
     private final List<Product> productList = new ArrayList<>();
-    private Product product;
 
     @BeforeEach
     void setUp() {
@@ -35,7 +36,6 @@ class ProductServiceImplTest {
                 .thenReturn(Optional.of(new Product(1, "computer", 400)));
         productList.add(new Product(1, "computer", 400));
         productList.add(new Product(2, "mouse", 10));
-        product = new Product(1, "computer", 400);
     }
 
     @AfterEach
@@ -44,42 +44,37 @@ class ProductServiceImplTest {
         productDao = null;
     }
 
+    static List<Product> parameters() {
+        return Arrays.asList(
+                new Product(2, "computer", 400),
+                new Product(1, "laptop", 400),
+                new Product(1, "computer", 401));
+    }
+
     @Test
     void findAll_empty() {
         when(productDao.findAll()).thenReturn(new ArrayList<>());
-        assertTrue(productService.findAll().isEmpty());
+        assertThat(productService.findAll(), empty());
     }
 
     @Test
     void findAll() {
-        assertEquals(productList, productService.findAll());
+        assertThat(productService.findAll(), equalTo(productList));
     }
 
     @Test
     void findById_null() {
-        assertNull(productService.findById(3));
+        assertThat(productService.findById(3), nullValue());
     }
 
-    @Test
-    void findById_idNotEquals() {
-        product = new Product(2, "computer", 400);
-        assertNotEquals(product, productService.findById(1));
-    }
-
-    @Test
-    void findById_nameNotEquals() {
-        product = new Product(1, "laptop", 400);
-        assertNotEquals(product, productService.findById(1));
-    }
-
-    @Test
-    void findById_priceNotEquals() {
-        product = new Product(1, "computer", 401);
-        assertNotEquals(product, productService.findById(1));
+    @ParameterizedTest
+    @MethodSource("parameters")
+    void findById_NotEqualsIdNamePrice(Product product) {
+        assertThat(productService.findById(1), not(product));
     }
 
     @Test
     void findById() {
-        assertEquals(product, productService.findById(1));
+        assertThat(productService.findById(1), equalTo(new Product(1, "computer", 400)));
     }
 }
