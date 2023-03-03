@@ -1,0 +1,1 @@
+insert into product(id, name, price) values(3, 'desktop', 500);
