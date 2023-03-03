@@ -7,4 +7,5 @@ import java.util.List;
 public interface IProductController {
     List<Product> findAll();
     Product findById(int id);
+    Product save(Product product);
 }

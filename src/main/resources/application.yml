@@ -9,8 +9,7 @@ spring:
     url: jdbc:h2:mem:testDb
     username: sa
 server:
-    port: 8080
-
+    port: 9090
 ---
 spring:
   config:
