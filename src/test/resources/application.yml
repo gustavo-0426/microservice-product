@@ -1,0 +1,12 @@
+spring:
+  main:
+    banner-mode: off
+    log-startup-info: false
+  jpa:
+    show-sql: false
+    defer-datasource-initialization: true
+logging:
+  level:
+    root: off
+    web: off
+
