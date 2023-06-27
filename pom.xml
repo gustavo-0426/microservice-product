@@ -8,10 +8,10 @@
 		<version>2.6.7</version>
 	</parent>
 	<groupId>com.co.softworld</groupId>
-	<artifactId>microservice-product</artifactId>
+	<artifactId>api-microservice-product-h2</artifactId>
 	<version>1.0.0</version>
-	<name>microservice-product</name>
-	<description>This is a microservice product</description>
+	<name>api-microservice-product-h2</name>
+	<description>This is a api microservice product</description>
 
 	<properties>
 		<java.version>11</java.version>
