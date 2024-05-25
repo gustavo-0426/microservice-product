@@ -1,4 +1,4 @@
-FROM amazoncorretto:11.0.19
+FROM openjdk:11
 MAINTAINER Gustavo Castro
 
 RUN mkdir -p /home/api-microservice-product-h2/
