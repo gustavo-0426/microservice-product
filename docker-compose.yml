@@ -1,8 +1,7 @@
-version: '3.9'
 services:
   api:
     build: .
-    image: gustavo0426/api-microservice-product-h2:1.0.0
+    image: gustavo0426/api-microservice-product-h2:2.0.0
     container_name: api-microservice-product-h2
     restart: always
     ports:
