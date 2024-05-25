@@ -4,7 +4,6 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
-import org.hibernate.Hibernate;
 
 import javax.persistence.*;
 import java.util.Objects;
@@ -25,10 +24,15 @@ public class Product {
     private double price;
 
     @Override
-    public boolean equals(Object object) {
-        if (this == object) return true;
-        if (object == null || Hibernate.getClass(this) != Hibernate.getClass(object)) return false;
-        Product product = (Product) object;
-        return Objects.equals(id, product.id) && Objects.equals(name, product.name) && Objects.equals(price, product.price);
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (!(o instanceof Product)) return false;
+        Product product = (Product) o;
+        return id == product.id && Double.compare(product.price, price) == 0 && Objects.equals(name, product.name);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(id, name, price);
     }
 }
