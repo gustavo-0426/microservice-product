@@ -18,9 +18,9 @@ public class Product {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Id
     private int id;
-    @Column(name = "name", length = 20)
+    @Column(length = 20)
     private String name;
-    @Column(name = "price", length = 20)
+    @Column(length = 20)
     private double price;
 
     @Override

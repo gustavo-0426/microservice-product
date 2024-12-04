@@ -1,4 +1,4 @@
-package com.co.softworld.controller.controlerImpl;
+package com.co.softworld.controller;
 
 import com.co.softworld.entity.Product;
 import com.co.softworld.service.IProductService;
@@ -17,7 +17,7 @@ import static org.springframework.http.MediaType.APPLICATION_JSON;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
-@WebMvcTest(ProductControllerImpl.class)
+@WebMvcTest(ProductController.class)
 class ProductControllerImplTest {
 
     @Autowired

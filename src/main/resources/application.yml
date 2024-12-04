@@ -11,6 +11,10 @@ spring-doc:
   swagger-ui:
     path: /custom-swagger # Cambia la ruta de Swagger UI
 
+logging:
+  level:
+    org.springframework.security: debug
+
 # swagger = http://localhost:9090/swagger-ui/index.html
 # swagger = http://localhost:9090/custom-swagger
 # swagger = http://localhost:9090/custom-docs
