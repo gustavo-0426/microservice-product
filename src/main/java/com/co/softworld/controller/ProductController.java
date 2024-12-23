@@ -9,7 +9,7 @@ import java.util.List;
 
 @AllArgsConstructor
 @RestController
-@RequestMapping("/microservices/product")
+@RequestMapping("/microservice/product")
 public class ProductController {
 
     private final IProductService productService;
@@ -19,7 +19,7 @@ public class ProductController {
         return productService.findAll();
     }
 
-    @GetMapping("/findById/{id}")
+    @GetMapping("/{id}")
     public Product findById(@PathVariable int id) {
         return productService.findById(id);
     }
