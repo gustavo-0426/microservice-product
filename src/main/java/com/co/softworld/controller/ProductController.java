@@ -1,34 +1,30 @@
-package com.co.softworld.controller.controlerImpl;
+package com.co.softworld.controller;
 
-import com.co.softworld.controller.IProductController;
 import com.co.softworld.entity.Product;
 import com.co.softworld.service.IProductService;
-import org.springframework.beans.factory.annotation.Autowired;
+import lombok.AllArgsConstructor;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
+@AllArgsConstructor
 @RestController
-@RequestMapping("/microservices/product")
-public class ProductControllerImpl implements IProductController {
+@RequestMapping("/microservice/product")
+public class ProductController {
 
-    @Autowired
-    private IProductService productService;
+    private final IProductService productService;
 
-    @Override
-    @GetMapping("/findAll")
+    @GetMapping()
     public List<Product> findAll() {
         return productService.findAll();
     }
 
-    @Override
-    @GetMapping("/findById/{id}")
+    @GetMapping("/{id}")
     public Product findById(@PathVariable int id) {
         return productService.findById(id);
     }
 
-    @Override
-    @PostMapping("")
+    @PostMapping()
     public Product save(@RequestBody Product product) {
         return productService.save(product);
     }

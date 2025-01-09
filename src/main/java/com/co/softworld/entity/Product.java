@@ -5,7 +5,7 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
-import javax.persistence.*;
+import jakarta.persistence.*;
 import java.util.Objects;
 
 @Getter
@@ -18,16 +18,15 @@ public class Product {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Id
     private int id;
-    @Column(name = "name", length = 20)
+    @Column(length = 20)
     private String name;
-    @Column(name = "price", length = 20)
+    @Column(length = 20)
     private double price;
 
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
-        if (!(o instanceof Product)) return false;
-        Product product = (Product) o;
+        if (!(o instanceof Product product)) return false;
         return id == product.id && Double.compare(product.price, price) == 0 && Objects.equals(name, product.name);
     }
 

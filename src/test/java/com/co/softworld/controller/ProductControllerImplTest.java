@@ -1,4 +1,4 @@
-package com.co.softworld.controller.controlerImpl;
+package com.co.softworld.controller;
 
 import com.co.softworld.entity.Product;
 import com.co.softworld.service.IProductService;
@@ -8,7 +8,13 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
-import org.springframework.test.web.servlet.*;
+import org.springframework.security.core.userdetails.User;
+import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.core.userdetails.UserDetailsService;
+import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors;
+import org.springframework.test.web.servlet.MockMvc;
+import org.springframework.test.web.servlet.RequestBuilder;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 
 import static java.util.Arrays.asList;
@@ -17,24 +23,43 @@ import static org.springframework.http.MediaType.APPLICATION_JSON;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
-@WebMvcTest(ProductControllerImpl.class)
+@WebMvcTest(ProductController.class)
 class ProductControllerImplTest {
 
     @Autowired
     private MockMvc mockMvc;
     @MockBean
     private IProductService productService;
+    @MockBean
+    private PasswordEncoder passwordEncoderMock;
+    @MockBean
+    private UserDetailsService userDetailsServiceMock;
     private RequestBuilder requestFindAll;
     private RequestBuilder requestFindById;
 
     @BeforeEach
     void setUp() {
 
+        when(passwordEncoderMock.encode("password")).thenReturn("passwordTestEncoded");
+        when(passwordEncoderMock.matches("password", "passwordTestEncoded")).thenReturn(true);
+
+        UserDetails userDetails = User.builder()
+                .username("test")
+                .password(passwordEncoderMock.encode("password"))
+                .authorities("ROLE_ADMIN")
+                .build();
+
+        when(userDetailsServiceMock.loadUserByUsername("test")).thenReturn(userDetails);
+
         requestFindAll = MockMvcRequestBuilders
-                .get("/microservices/product/findAll")
+                .get("/microservice/product")
+                .with(SecurityMockMvcRequestPostProcessors.csrf())
+                .with(SecurityMockMvcRequestPostProcessors.httpBasic("test", "password"))
                 .accept(APPLICATION_JSON);
         requestFindById = MockMvcRequestBuilders
-                .get("/microservices/product/findById/1")
+                .get("/microservice/product/1")
+                .with(SecurityMockMvcRequestPostProcessors.csrf())
+                .with(SecurityMockMvcRequestPostProcessors.httpBasic("test", "password"))
                 .accept(APPLICATION_JSON);
         when(productService.findAll())
                 .thenReturn(asList(new Product(1, "computer", 400), new Product(2, "mouse", 10)));
@@ -54,7 +79,7 @@ class ProductControllerImplTest {
     void testFindAll_onlyOneElement() throws Exception {
         mockMvc.perform(requestFindAll)
                 .andExpect(status().isOk())
-                .andExpect(content().json("[{id:1,name:computer,price:400},{}]"))
+                .andExpect(content().json("[{id:1,name:\"computer\",price:400},{}]"))
                 .andReturn();
     }
 
@@ -70,7 +95,7 @@ class ProductControllerImplTest {
     void testFindAll_onlyElementName() throws Exception {
         mockMvc.perform(requestFindAll)
                 .andExpect(status().isOk())
-                .andExpect(content().json("[{name:computer},{}]"))
+                .andExpect(content().json("[{name:\"computer\"},{}]"))
                 .andReturn();
     }
 
@@ -86,7 +111,7 @@ class ProductControllerImplTest {
     void testFindAll_AllElementsStrict() throws Exception {
         mockMvc.perform(requestFindAll)
                 .andExpect(status().isOk())
-                .andExpect(content().json("[{id:1,name:computer,price:400},{id:2,name:mouse,price:10}]", true))
+                .andExpect(content().json("[{id:1,name:\"computer\",price:400},{id:2,name:\"mouse\",price:10}]", true))
                 .andReturn();
     }
 
@@ -101,7 +126,9 @@ class ProductControllerImplTest {
     @Test
     void testFindById_null() throws Exception {
         requestFindById = MockMvcRequestBuilders
-                .get("/microservices/product/findById/2")
+                .get("/microservice/product/2")
+                .with(SecurityMockMvcRequestPostProcessors.csrf())
+                .with(SecurityMockMvcRequestPostProcessors.httpBasic("test", "password"))
                 .accept(APPLICATION_JSON);
         mockMvc.perform(requestFindById)
                 .andExpect(status().isOk())
@@ -121,7 +148,7 @@ class ProductControllerImplTest {
     void testFindById_onlyElementName() throws Exception {
         mockMvc.perform(requestFindById)
                 .andExpect(status().isOk())
-                .andExpect(content().json("{name:computer}"))
+                .andExpect(content().json("{name:\"computer\"}"))
                 .andReturn();
     }
 
@@ -137,7 +164,7 @@ class ProductControllerImplTest {
     void testFindById_AllElementStrict() throws Exception {
         mockMvc.perform(requestFindById)
                 .andExpect(status().isOk())
-                .andExpect(content().json("{id:1, name:computer, price:400}"))
+                .andExpect(content().json("{id:1, name:\"computer\", price:400}"))
                 .andReturn();
     }
 

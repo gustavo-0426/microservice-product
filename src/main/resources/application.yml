@@ -2,15 +2,19 @@ spring:
   profiles:
     active: "dev"
 ---
-spring:
-  jpa:
-    show-sql: true
-    defer-datasource-initialization: true
-  h2:
-    console:
-      enabled: true
-  datasource:
-    url: jdbc:h2:mem:testDb
-    username: sa
 server:
     port: 9090
+
+spring-doc:
+  api-docs:
+    path: /custom-docs # Cambia la ruta del JSON de OpenAPI
+  swagger-ui:
+    path: /custom-swagger # Cambia la ruta de Swagger UI
+
+logging:
+  level:
+    org.springframework.security: debug
+
+# swagger = http://localhost:9090/swagger-ui/index.html
+# swagger = http://localhost:9090/custom-swagger
+# swagger = http://localhost:9090/custom-docs
