@@ -12,6 +12,7 @@ import org.springframework.security.core.userdetails.User;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.RequestBuilder;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
@@ -19,7 +20,6 @@ import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 import static java.util.Arrays.asList;
 import static org.mockito.Mockito.when;
 import static org.springframework.http.MediaType.APPLICATION_JSON;
-import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.httpBasic;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
@@ -53,11 +53,13 @@ class ProductControllerImplTest {
 
         requestFindAll = MockMvcRequestBuilders
                 .get("/microservice/product")
-                .with(httpBasic("test", "password"))
+                .with(SecurityMockMvcRequestPostProcessors.csrf())
+                .with(SecurityMockMvcRequestPostProcessors.httpBasic("test", "password"))
                 .accept(APPLICATION_JSON);
         requestFindById = MockMvcRequestBuilders
                 .get("/microservice/product/1")
-                .with(httpBasic("test", "password"))
+                .with(SecurityMockMvcRequestPostProcessors.csrf())
+                .with(SecurityMockMvcRequestPostProcessors.httpBasic("test", "password"))
                 .accept(APPLICATION_JSON);
         when(productService.findAll())
                 .thenReturn(asList(new Product(1, "computer", 400), new Product(2, "mouse", 10)));
@@ -125,7 +127,8 @@ class ProductControllerImplTest {
     void testFindById_null() throws Exception {
         requestFindById = MockMvcRequestBuilders
                 .get("/microservice/product/2")
-                .with(httpBasic("test", "password"))
+                .with(SecurityMockMvcRequestPostProcessors.csrf())
+                .with(SecurityMockMvcRequestPostProcessors.httpBasic("test", "password"))
                 .accept(APPLICATION_JSON);
         mockMvc.perform(requestFindById)
                 .andExpect(status().isOk())
