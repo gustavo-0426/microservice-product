@@ -10,3 +10,5 @@ logging:
     root: off
     web: off
 
+api:
+  version: v1
