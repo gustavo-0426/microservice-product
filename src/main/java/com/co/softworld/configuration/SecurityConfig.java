@@ -1,6 +1,7 @@
 package com.co.softworld.configuration;
 
 import com.co.softworld.dao.IUserDao;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.http.HttpMethod;
@@ -21,13 +22,16 @@ import org.springframework.security.web.SecurityFilterChain;
 @EnableWebSecurity
 public class SecurityConfig {
 
+    @Value("${api.version}")
+    private String apiVersion;
+
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         http
                 .csrf(AbstractHttpConfigurer::disable)
                 .authorizeHttpRequests(aut -> aut
-                        .requestMatchers(HttpMethod.GET, "/microservice/product/**").hasAnyRole("USER", "ADMIN")
-                        .requestMatchers(HttpMethod.POST, "/microservice/product/**").hasRole("ADMIN")
+                        .requestMatchers(HttpMethod.GET, "/" + apiVersion + "/microservice/product/**").hasAnyRole("USER", "ADMIN")
+                        .requestMatchers(HttpMethod.POST, "/" + apiVersion + "/microservice/product/**").hasRole("ADMIN")
                         .anyRequest().authenticated()
                 )
                 .sessionManagement(session -> session
